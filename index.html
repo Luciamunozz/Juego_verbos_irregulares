@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practica de Verbos Irregulares en Inglés</title>
+
+    <!-- Meta tags para vistas previas e icono de iPhone/Móvil -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta property="og:title" content="Juego Verbos Irregulares">
+    <meta property="og:description" content="Aprende y practica los verbos irregulares en inglés.">
+    <meta property="og:image" content="https://luciamunozz.github.io/Juego_verbos_irregulares/icon.png">
+    <meta property="og:type" content="website">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,24 +22,19 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Custom Scrollbar for Table */
+        /* Scrollbar personalizada */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
             background: #f1f5f9;
-            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
         }
 
         .correct-input {
@@ -52,115 +56,142 @@
     </style>
 </head>
 
-<body class="bg-slate-100 min-h-screen text-slate-800 antialiased pb-12">
+<body class="bg-slate-100 min-h-screen text-slate-800 antialiased pb-28 sm:pb-12">
 
+    <!-- Header con puntuación -->
     <header class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-blue-600 text-white shadow-lg sticky top-0 z-30">
         <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="p-3 bg-white/10 rounded-xl backdrop-blur-md">
-                    <i class="fa-solid fa-graduation-cap text-2xl text-indigo-200"></i>
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-5 flex flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="p-2 sm:p-3 bg-white/10 rounded-xl backdrop-blur-md">
+                    <i class="fa-solid fa-graduation-cap text-lg sm:text-2xl text-indigo-200"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight">Verbos Irregulares en Inglés</h1>
-                    <p class="text-xs sm:text-sm text-indigo-200">Completa el Pasado Simple y el Participio Pasado</p>
+                    <h1 class="text-base sm:text-2xl font-bold tracking-tight leading-tight">Verbos Irregulares</h1>
+                    <p class="text-[11px] sm:text-sm text-indigo-200 hidden xs:block">Practica Pasado y Participio</p>
                 </div>
             </div>
 
             <!-- Score Badge Header -->
             <div
-                class="flex items-center space-x-3 bg-white/10 px-5 py-2.5 rounded-2xl backdrop-blur-md border border-white/20">
-                <i class="fa-solid fa-trophy text-amber-300 text-xl"></i>
+                class="flex items-center space-x-2 sm:space-x-3 bg-white/10 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-xl sm:rounded-2xl backdrop-blur-md border border-white/20">
+                <i class="fa-solid fa-trophy text-amber-300 text-base sm:text-xl"></i>
                 <div>
-                    <span class="text-xs text-indigo-200 block font-medium uppercase tracking-wider">Puntuación</span>
-                    <div class="text-xl font-extrabold flex items-center gap-1">
+                    <span
+                        class="text-[10px] sm:text-xs text-indigo-200 block font-medium uppercase tracking-wider">Puntuación</span>
+                    <div class="text-sm sm:text-xl font-extrabold flex items-center gap-1">
                         <span id="scoreDisplay">0</span>
-                        <span class="text-sm font-normal text-indigo-200">/ <span id="maxScoreDisplay">0</span></span>
+                        <span class="text-xs sm:text-sm font-normal text-indigo-200">/ <span
+                                id="maxScoreDisplay">0</span></span>
                         <span id="percentageDisplay"
-                            class="text-xs bg-indigo-500/50 px-2 py-0.5 rounded-full ml-2 font-normal">0%</span>
+                            class="text-[10px] sm:text-xs bg-indigo-500/50 px-1.5 py-0.5 rounded-full ml-1 font-normal">0%</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-4 sm:mt-6">
 
-        <!-- Controls & Stats Bar -->
+        <!-- Buscador y Filtros -->
         <div
-            class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80 mb-6 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
-
-            <!-- Search & Filters -->
-            <div class="flex-1 flex flex-col sm:flex-row gap-3">
+            class="glass-card rounded-2xl p-3.5 sm:p-6 shadow-sm border border-slate-200/80 mb-4 sm:mb-6 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3">
+            <div class="flex-1 flex flex-col sm:flex-row gap-2.5">
                 <div class="relative flex-1">
                     <i
-                        class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                     <input type="text" id="searchInput" placeholder="Buscar verbo o traducción..."
-                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 </div>
                 <select id="filterSelect"
-                    class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                    <option value="all">Todos los verbos (100+)</option>
+                    class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    <option value="all">Todos los verbos</option>
                     <option value="pending">Sin responder</option>
                     <option value="incorrect">Incorrectos</option>
                     <option value="correct">Correctos</option>
                 </select>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap sm:flex-nowrap items-center gap-3">
-                <button id="checkBtn" onclick="evaluateAnswers()"
-                    class="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-xl shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2">
+            <!-- Botones en versión escritorio -->
+            <div class="hidden md:flex items-center gap-3">
+                <button onclick="evaluateAnswers()"
+                    class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-check"></i>
                     <span>Corregir</span>
                 </button>
-                <button id="revealBtn" onclick="toggleRevealAnswers()"
-                    class="flex-1 sm:flex-none px-4 py-2.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-medium rounded-xl transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-eye" id="revealIcon"></i>
-                    <span id="revealBtnText">Ver Respuestas</span>
+                <button onclick="toggleRevealAnswers()"
+                    class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-eye" id="revealIconDesktop"></i>
+                    <span id="revealBtnTextDesktop">Ver Respuestas</span>
                 </button>
-                <button id="resetBtn" onclick="resetForm()"
+                <button onclick="resetForm()"
                     class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-xl transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-rotate-left"></i>
-                    <span class="hidden sm:inline">Reiniciar</span>
+                    <span>Reiniciar</span>
                 </button>
             </div>
         </div>
 
-        <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6 overflow-hidden">
-            <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
-                style="width: 0%"></div>
+        <!-- Barra de Progreso -->
+        <div class="w-full bg-slate-200 rounded-full h-2 mb-4 sm:mb-6 overflow-hidden">
+            <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 0%">
+            </div>
         </div>
 
-        <div class="glass-card rounded-2xl shadow-md border border-slate-200/80 overflow-hidden">
+        <!-- Vista Móvil (Tarjetas Adaptables) -->
+        <div id="mobileCardsContainer" class="block md:hidden space-y-3.5">
+            <!-- Inyectado dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Vista Escritorio (Tabla tradicional) -->
+        <div class="hidden md:block glass-card rounded-2xl shadow-md border border-slate-200/80 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr
                             class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                            <th class="py-4 px-4 sm:px-6 w-12 text-center">#</th>
-                            <th class="py-4 px-4 sm:px-6 w-1/4">Infinitivo</th>
-                            <th class="py-4 px-4 sm:px-6 w-1/4">Pasado Simple</th>
-                            <th class="py-4 px-4 sm:px-6 w-1/4">Participio Pasado</th>
-                            <th class="py-4 px-4 sm:px-6 w-1/4">Traducción (Español)</th>
+                            <th class="py-4 px-4 w-12 text-center">#</th>
+                            <th class="py-4 px-4 w-1/4">Infinitivo</th>
+                            <th class="py-4 px-4 w-1/4">Pasado Simple</th>
+                            <th class="py-4 px-4 w-1/4">Participio Pasado</th>
+                            <th class="py-4 px-4 w-1/4">Traducción (Español)</th>
                         </tr>
                     </thead>
                     <tbody id="verbsTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Dynamic Rows injected via Javascript -->
+                        <!-- Inyectado dinámicamente con JavaScript -->
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden p-12 text-center">
-                <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 mb-3 block"></i>
-                <p class="text-slate-500 font-medium">No se encontraron verbos que coincidan con la búsqueda.</p>
-            </div>
+        <!-- Estado vacío sin resultados -->
+        <div id="emptyState" class="hidden p-8 sm:p-12 text-center bg-white rounded-2xl border border-slate-200 mt-4">
+            <i class="fa-solid fa-magnifying-glass text-3xl sm:text-4xl text-slate-300 mb-3 block"></i>
+            <p class="text-slate-500 font-medium text-sm sm:text-base">No se encontraron verbos que coincidan con la
+                búsqueda.</p>
         </div>
     </main>
 
+    <!-- Barra Inferior Flotante (Solo Móvil para facilitar tocar con el pulgar) -->
+    <div
+        class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 flex md:hidden items-center justify-between gap-2 z-40 shadow-lg">
+        <button onclick="evaluateAnswers()"
+            class="flex-1 py-2.5 bg-indigo-600 active:bg-indigo-700 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-check"></i>
+            <span>Corregir</span>
+        </button>
+        <button onclick="toggleRevealAnswers()"
+            class="flex-1 py-2.5 bg-amber-500 active:bg-amber-600 text-white font-medium rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-eye" id="revealIconMobile"></i>
+            <span id="revealBtnTextMobile">Respuestas</span>
+        </button>
+        <button onclick="resetForm()"
+            class="px-3.5 py-2.5 bg-slate-200 active:bg-slate-300 text-slate-700 font-medium rounded-xl text-xs sm:text-sm flex items-center justify-center">
+            <i class="fa-solid fa-rotate-left"></i>
+        </button>
+    </div>
+
     <script>
-        // Exact verb dataset provided in prompt
         const verbsData = [
             { infinitive: "Arise", past: ["Arose"], participle: ["Arisen"], spanish: "Surgir, levantarse" },
             { infinitive: "Awake", past: ["Awoke"], participle: ["Awoken"], spanish: "Despertarse" },
@@ -276,78 +307,119 @@
 
         let isAnswersRevealed = false;
 
-        function renderTable() {
+        function renderElements() {
             const tbody = document.getElementById('verbsTableBody');
+            const cardsContainer = document.getElementById('mobileCardsContainer');
             tbody.innerHTML = '';
+            cardsContainer.innerHTML = '';
 
             const maxScore = verbsData.length * 2;
             document.getElementById('maxScoreDisplay').textContent = maxScore;
 
             verbsData.forEach((verb, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50/80 transition verb-row';
-                tr.dataset.index = index;
-
                 const primaryPast = verb.past[0];
                 const primaryParticiple = verb.participle[0];
 
+                // 1. Renderizar en la Tabla (Escritorio)
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition verb-row';
+                tr.dataset.index = index;
                 tr.innerHTML = `
-                    <td class="py-3 px-4 sm:px-6 text-slate-400 font-medium text-center text-xs">${index + 1}</td>
-                    <td class="py-3 px-4 sm:px-6 font-semibold text-slate-800">${verb.infinitive}</td>
-                    <td class="py-3 px-4 sm:px-6">
+                    <td class="py-3 px-4 text-slate-400 font-medium text-center text-xs">${index + 1}</td>
+                    <td class="py-3 px-4 font-semibold text-slate-800">${verb.infinitive}</td>
+                    <td class="py-3 px-4">
                         <div class="relative flex flex-col">
-                            <input type="text" 
-                                   id="past-${index}" 
-                                   data-type="past"
-                                   data-index="${index}"
-                                   placeholder="Pasado..."
-                                   autocomplete="off"
-                                   spellcheck="false"
-                                   class="verb-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            <input type="text" id="past-${index}" placeholder="Pasado..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                   class="verb-input past-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                             <span id="hint-past-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1">
                                 Correcto: <span class="text-indigo-600 font-semibold">${primaryPast}</span>
                             </span>
                         </div>
                     </td>
-                    <td class="py-3 px-4 sm:px-6">
+                    <td class="py-3 px-4">
                         <div class="relative flex flex-col">
-                            <input type="text" 
-                                   id="participle-${index}" 
-                                   data-type="participle"
-                                   data-index="${index}"
-                                   placeholder="Participio..."
-                                   autocomplete="off"
-                                   spellcheck="false"
-                                   class="verb-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            <input type="text" id="participle-${index}" placeholder="Participio..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                   class="verb-input participle-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                             <span id="hint-participle-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1">
                                 Correcto: <span class="text-indigo-600 font-semibold">${primaryParticiple}</span>
                             </span>
                         </div>
                     </td>
-                    <td class="py-3 px-4 sm:px-6 text-slate-600 font-normal">${verb.spanish}</td>
+                    <td class="py-3 px-4 text-slate-600 font-normal">${verb.spanish}</td>
                 `;
                 tbody.appendChild(tr);
+
+                // 2. Renderizar en Tarjeta (Móvil)
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-xl p-4 border border-slate-200/80 shadow-sm verb-row';
+                card.dataset.index = index;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-indigo-100 text-indigo-700 font-semibold px-2 py-0.5 rounded-md">#${index + 1}</span>
+                            <h3 class="text-lg font-bold text-slate-800">${verb.infinitive}</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-md text-right">${verb.spanish}</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 uppercase mb-1">Pasado Simple</label>
+                            <input type="text" id="mob-past-${index}" placeholder="Ej: ${primaryPast}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                class="verb-input mob-past-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                            <span id="mob-hint-past-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1 block">
+                                Correcto: <span class="text-indigo-600 font-semibold">${primaryPast}</span>
+                            </span>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 uppercase mb-1">Participio Pasado</label>
+                            <input type="text" id="mob-participle-${index}" placeholder="Ej: ${primaryParticiple}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                                class="verb-input mob-participle-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                            <span id="mob-hint-participle-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1 block">
+                                Correcto: <span class="text-indigo-600 font-semibold">${primaryParticiple}</span>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
             });
 
-            // Attach input event listener for dynamic updates
-            document.querySelectorAll('.verb-input').forEach(input => {
-                input.addEventListener('input', () => {
-                    // Reset styling on typing
-                    input.classList.remove('correct-input', 'incorrect-input');
-                    const hintId = `hint-${input.id}`;
-                    const hintEl = document.getElementById(hintId);
-                    if (hintEl) hintEl.classList.add('hidden');
-                });
+            // Sincronizar inputs móvil y escritorio al escribir
+            verbsData.forEach((_, index) => {
+                const pastDesk = document.getElementById(`past-${index}`);
+                const pastMob = document.getElementById(`mob-past-${index}`);
+                const partDesk = document.getElementById(`participle-${index}`);
+                const partMob = document.getElementById(`mob-participle-${index}`);
+
+                pastDesk.addEventListener('input', () => { pastMob.value = pastDesk.value; clearInputStyles(index); });
+                pastMob.addEventListener('input', () => { pastDesk.value = pastMob.value; clearInputStyles(index); });
+
+                partDesk.addEventListener('input', () => { partMob.value = partDesk.value; clearInputStyles(index); });
+                partMob.addEventListener('input', () => { partDesk.value = partMob.value; clearInputStyles(index); });
             });
         }
 
-        // Normalization helper to evaluate answers flexibly
+        function clearInputStyles(index) {
+            const inputs = [
+                document.getElementById(`past-${index}`),
+                document.getElementById(`mob-past-${index}`),
+                document.getElementById(`participle-${index}`),
+                document.getElementById(`mob-participle-${index}`)
+            ];
+            inputs.forEach(input => input.classList.remove('correct-input', 'incorrect-input'));
+
+            const hints = [
+                document.getElementById(`hint-past-${index}`),
+                document.getElementById(`mob-hint-past-${index}`),
+                document.getElementById(`hint-participle-${index}`),
+                document.getElementById(`mob-hint-participle-${index}`)
+            ];
+            hints.forEach(hint => hint.classList.add('hidden'));
+        }
+
         function normalizeString(str) {
-            return str
-                .toLowerCase()
-                .trim()
-                .replace(/\s+/g, ' ')
-                .replace(/\s*\/\s*/g, '/'); // normalize spaces around slash
+            return str.toLowerCase().trim().replace(/\s+/g, ' ').replace(/\s*\/\s*/g, '/');
         }
 
         function evaluateAnswers() {
@@ -356,122 +428,113 @@
 
             verbsData.forEach((verb, index) => {
                 const pastInput = document.getElementById(`past-${index}`);
+                const mobPastInput = document.getElementById(`mob-past-${index}`);
                 const participleInput = document.getElementById(`participle-${index}`);
+                const mobParticipleInput = document.getElementById(`mob-participle-${index}`);
 
                 const pastHint = document.getElementById(`hint-past-${index}`);
+                const mobPastHint = document.getElementById(`mob-hint-past-${index}`);
                 const participleHint = document.getElementById(`hint-participle-${index}`);
+                const mobParticipleHint = document.getElementById(`mob-hint-participle-${index}`);
 
-                // Evaluate Past
+                // Evaluar Pasado
                 const userPast = normalizeString(pastInput.value);
                 const validPast = verb.past.map(normalizeString);
 
                 if (userPast !== "" && validPast.includes(userPast)) {
                     currentScore++;
-                    pastInput.classList.remove('incorrect-input');
                     pastInput.classList.add('correct-input');
-                    pastHint.classList.add('hidden');
+                    mobPastInput.classList.add('correct-input');
                 } else if (userPast !== "") {
-                    pastInput.classList.remove('correct-input');
                     pastInput.classList.add('incorrect-input');
+                    mobPastInput.classList.add('incorrect-input');
                     pastHint.classList.remove('hidden');
-                } else {
-                    pastInput.classList.remove('correct-input', 'incorrect-input');
-                    pastHint.classList.add('hidden');
+                    mobPastHint.classList.remove('hidden');
                 }
 
-                // Evaluate Participle
+                // Evaluar Participio
                 const userParticiple = normalizeString(participleInput.value);
                 const validParticiple = verb.participle.map(normalizeString);
 
                 if (userParticiple !== "" && validParticiple.includes(userParticiple)) {
                     currentScore++;
-                    participleInput.classList.remove('incorrect-input');
                     participleInput.classList.add('correct-input');
-                    participleHint.classList.add('hidden');
+                    mobParticipleInput.classList.add('correct-input');
                 } else if (userParticiple !== "") {
-                    participleInput.classList.remove('correct-input');
                     participleInput.classList.add('incorrect-input');
+                    mobParticipleInput.classList.add('incorrect-input');
                     participleHint.classList.remove('hidden');
-                } else {
-                    participleInput.classList.remove('correct-input', 'incorrect-input');
-                    participleHint.classList.add('hidden');
+                    mobParticipleHint.classList.remove('hidden');
                 }
             });
 
-            // Update UI Score & Progress
+            // Actualizar puntuación
             animateCounter('scoreDisplay', currentScore);
             const percentage = Math.round((currentScore / maxScore) * 100);
             document.getElementById('percentageDisplay').textContent = `${percentage}%`;
             document.getElementById('progressBar').style.width = `${percentage}%`;
 
-            // Filter if currently filtering
             filterVerbs();
         }
 
-        // Animated counter helper
         function animateCounter(elementId, targetValue) {
             const el = document.getElementById(elementId);
             const startValue = parseInt(el.textContent) || 0;
-            const duration = 500;
+            const duration = 400;
             const startTime = performance.now();
 
             function update(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const value = Math.floor(startValue + (targetValue - startValue) * progress);
-                el.textContent = value;
-
-                if (progress < 1) {
-                    requestAnimationFrame(update);
-                }
+                el.textContent = Math.floor(startValue + (targetValue - startValue) * progress);
+                if (progress < 1) requestAnimationFrame(update);
             }
-
             requestAnimationFrame(update);
         }
 
         function toggleRevealAnswers() {
             isAnswersRevealed = !isAnswersRevealed;
 
-            const btnText = document.getElementById('revealBtnText');
-            const btnIcon = document.getElementById('revealIcon');
-
             verbsData.forEach((verb, index) => {
-                const pastInput = document.getElementById(`past-${index}`);
-                const participleInput = document.getElementById(`participle-${index}`);
+                const pastDesk = document.getElementById(`past-${index}`);
+                const pastMob = document.getElementById(`mob-past-${index}`);
+                const partDesk = document.getElementById(`participle-${index}`);
+                const partMob = document.getElementById(`mob-participle-${index}`);
 
                 if (isAnswersRevealed) {
-                    pastInput.value = verb.past[0];
-                    participleInput.value = verb.participle[0];
+                    pastDesk.value = pastMob.value = verb.past[0];
+                    partDesk.value = partMob.value = verb.participle[0];
                 } else {
-                    pastInput.value = '';
-                    participleInput.value = '';
+                    pastDesk.value = pastMob.value = '';
+                    partDesk.value = partMob.value = '';
                 }
             });
 
+            const txtDesk = document.getElementById('revealBtnTextDesktop');
+            const txtMob = document.getElementById('revealBtnTextMobile');
+            const iconDesk = document.getElementById('revealIconDesktop');
+            const iconMob = document.getElementById('revealIconMobile');
+
             if (isAnswersRevealed) {
-                btnText.textContent = "Ocultar Respuestas";
-                btnIcon.className = "fa-solid fa-eye-slash";
+                txtDesk.textContent = "Ocultar Respuestas";
+                txtMob.textContent = "Ocultar";
+                iconDesk.className = iconMob.className = "fa-solid fa-eye-slash";
                 evaluateAnswers();
             } else {
-                btnText.textContent = "Ver Respuestas";
-                btnIcon.className = "fa-solid fa-eye";
+                txtDesk.textContent = "Ver Respuestas";
+                txtMob.textContent = "Respuestas";
+                iconDesk.className = iconMob.className = "fa-solid fa-eye";
                 resetForm();
             }
         }
 
         function resetForm() {
             verbsData.forEach((_, index) => {
-                const pastInput = document.getElementById(`past-${index}`);
-                const participleInput = document.getElementById(`participle-${index}`);
-                const pastHint = document.getElementById(`hint-past-${index}`);
-                const participleHint = document.getElementById(`hint-participle-${index}`);
-
-                pastInput.value = '';
-                participleInput.value = '';
-                pastInput.classList.remove('correct-input', 'incorrect-input');
-                participleInput.classList.remove('correct-input', 'incorrect-input');
-                pastHint.classList.add('hidden');
-                participleHint.classList.add('hidden');
+                clearInputStyles(index);
+                document.getElementById(`past-${index}`).value = '';
+                document.getElementById(`mob-past-${index}`).value = '';
+                document.getElementById(`participle-${index}`).value = '';
+                document.getElementById(`mob-participle-${index}`).value = '';
             });
 
             document.getElementById('scoreDisplay').textContent = '0';
@@ -481,8 +544,9 @@
             document.getElementById('filterSelect').value = 'all';
 
             isAnswersRevealed = false;
-            document.getElementById('revealBtnText').textContent = "Ver Respuestas";
-            document.getElementById('revealIcon').className = "fa-solid fa-eye";
+            document.getElementById('revealBtnTextDesktop').textContent = "Ver Respuestas";
+            document.getElementById('revealBtnTextMobile').textContent = "Respuestas";
+            document.getElementById('revealIconDesktop').className = document.getElementById('revealIconMobile').className = "fa-solid fa-eye";
 
             filterVerbs();
         }
@@ -500,14 +564,12 @@
                 const pastInput = document.getElementById(`past-${index}`);
                 const participleInput = document.getElementById(`participle-${index}`);
 
-                // Text search match
                 const matchesSearch =
                     verb.infinitive.toLowerCase().includes(query) ||
                     verb.spanish.toLowerCase().includes(query) ||
                     verb.past.some(p => p.toLowerCase().includes(query)) ||
                     verb.participle.some(p => p.toLowerCase().includes(query));
 
-                // State filter match
                 let matchesFilter = true;
                 const pastCorrect = pastInput.classList.contains('correct-input');
                 const participleCorrect = participleInput.classList.contains('correct-input');
@@ -531,16 +593,11 @@
             });
 
             const emptyState = document.getElementById('emptyState');
-            if (visibleCount === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-            }
+            emptyState.classList.toggle('hidden', visibleCount > 0);
         }
 
         window.onload = function () {
-            renderTable();
-
+            renderElements();
             document.getElementById('searchInput').addEventListener('input', filterVerbs);
             document.getElementById('filterSelect').addEventListener('change', filterVerbs);
         };
