@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica de Verbos Irregulares en Inglés</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom Scrollbar for Table */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .correct-input {
+            background-color: #e8f5e9 !important;
+            border-color: #2e7d32 !important;
+            color: #1b5e20 !important;
+        }
+
+        .incorrect-input {
+            background-color: #ffebee !important;
+            border-color: #c62828 !important;
+            color: #b71c1c !important;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100 min-h-screen text-slate-800 antialiased pb-12">
+
+    <header class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-blue-600 text-white shadow-lg sticky top-0 z-30">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-3 bg-white/10 rounded-xl backdrop-blur-md">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-indigo-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tight">Verbos Irregulares en Inglés</h1>
+                    <p class="text-xs sm:text-sm text-indigo-200">Completa el Pasado Simple y el Participio Pasado</p>
+                </div>
+            </div>
+
+            <!-- Score Badge Header -->
+            <div
+                class="flex items-center space-x-3 bg-white/10 px-5 py-2.5 rounded-2xl backdrop-blur-md border border-white/20">
+                <i class="fa-solid fa-trophy text-amber-300 text-xl"></i>
+                <div>
+                    <span class="text-xs text-indigo-200 block font-medium uppercase tracking-wider">Puntuación</span>
+                    <div class="text-xl font-extrabold flex items-center gap-1">
+                        <span id="scoreDisplay">0</span>
+                        <span class="text-sm font-normal text-indigo-200">/ <span id="maxScoreDisplay">0</span></span>
+                        <span id="percentageDisplay"
+                            class="text-xs bg-indigo-500/50 px-2 py-0.5 rounded-full ml-2 font-normal">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+        <!-- Controls & Stats Bar -->
+        <div
+            class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80 mb-6 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
+
+            <!-- Search & Filters -->
+            <div class="flex-1 flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <i
+                        class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar verbo o traducción..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                </div>
+                <select id="filterSelect"
+                    class="bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    <option value="all">Todos los verbos (100+)</option>
+                    <option value="pending">Sin responder</option>
+                    <option value="incorrect">Incorrectos</option>
+                    <option value="correct">Correctos</option>
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap sm:flex-nowrap items-center gap-3">
+                <button id="checkBtn" onclick="evaluateAnswers()"
+                    class="flex-1 sm:flex-none px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-xl shadow-md shadow-indigo-200 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Corregir</span>
+                </button>
+                <button id="revealBtn" onclick="toggleRevealAnswers()"
+                    class="flex-1 sm:flex-none px-4 py-2.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-medium rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-eye" id="revealIcon"></i>
+                    <span id="revealBtnText">Ver Respuestas</span>
+                </button>
+                <button id="resetBtn" onclick="resetForm()"
+                    class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-xl transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span class="hidden sm:inline">Reiniciar</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6 overflow-hidden">
+            <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
+                style="width: 0%"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl shadow-md border border-slate-200/80 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="bg-slate-50 border-b border-slate-200 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <th class="py-4 px-4 sm:px-6 w-12 text-center">#</th>
+                            <th class="py-4 px-4 sm:px-6 w-1/4">Infinitivo</th>
+                            <th class="py-4 px-4 sm:px-6 w-1/4">Pasado Simple</th>
+                            <th class="py-4 px-4 sm:px-6 w-1/4">Participio Pasado</th>
+                            <th class="py-4 px-4 sm:px-6 w-1/4">Traducción (Español)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="verbsTableBody" class="divide-y divide-slate-100 text-sm">
+                        <!-- Dynamic Rows injected via Javascript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden p-12 text-center">
+                <i class="fa-solid fa-magnifying-glass text-4xl text-slate-300 mb-3 block"></i>
+                <p class="text-slate-500 font-medium">No se encontraron verbos que coincidan con la búsqueda.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Exact verb dataset provided in prompt
+        const verbsData = [
+            { infinitive: "Arise", past: ["Arose"], participle: ["Arisen"], spanish: "Surgir, levantarse" },
+            { infinitive: "Awake", past: ["Awoke"], participle: ["Awoken"], spanish: "Despertarse" },
+            { infinitive: "Be (am/is/are)", past: ["Was", "Were", "Was / Were", "Was/Were"], participle: ["Been"], spanish: "Ser / estar" },
+            { infinitive: "Bear", past: ["Bore"], participle: ["Borne", "Born", "Borne / Born", "Borne/Born"], spanish: "Soportar, dar a luz" },
+            { infinitive: "Beat", past: ["Beat"], participle: ["Beaten"], spanish: "Golpear" },
+            { infinitive: "Become", past: ["Became"], participle: ["Become"], spanish: "Llegar a ser" },
+            { infinitive: "Begin", past: ["Began"], participle: ["Begun"], spanish: "Empezar" },
+            { infinitive: "Bend", past: ["Bent"], participle: ["Bent"], spanish: "Doblar" },
+            { infinitive: "Bet", past: ["Bet"], participle: ["Bet"], spanish: "Apostar" },
+            { infinitive: "Bind", past: ["Bound"], participle: ["Bound"], spanish: "Atar" },
+            { infinitive: "Bid", past: ["Bid"], participle: ["Bid"], spanish: "Pujar" },
+            { infinitive: "Bite", past: ["Bit"], participle: ["Bitten"], spanish: "Morder" },
+            { infinitive: "Bleed", past: ["Bled"], participle: ["Bled"], spanish: "Sangrar" },
+            { infinitive: "Blow", past: ["Blew"], participle: ["Blown"], spanish: "Soplar" },
+            { infinitive: "Break", past: ["Broke"], participle: ["Broken"], spanish: "Romper" },
+            { infinitive: "Breed", past: ["Bred"], participle: ["Bred"], spanish: "Criar" },
+            { infinitive: "Bring", past: ["Brought"], participle: ["Brought"], spanish: "Traer" },
+            { infinitive: "Broadcast", past: ["Broadcast"], participle: ["Broadcast"], spanish: "Radiar" },
+            { infinitive: "Build", past: ["Built"], participle: ["Built"], spanish: "Construir" },
+            { infinitive: "Burn", past: ["Burnt", "Burned", "Burnt / Burned", "Burnt/Burned"], participle: ["Burnt", "Burned", "Burnt / Burned", "Burnt/Burned"], spanish: "Quemar" },
+            { infinitive: "Burst", past: ["Burst"], participle: ["Burst"], spanish: "Reventar" },
+            { infinitive: "Buy", past: ["Bought"], participle: ["Bought"], spanish: "Comprar" },
+            { infinitive: "Cast", past: ["Cast"], participle: ["Cast"], spanish: "Arrojar" },
+            { infinitive: "Catch", past: ["Caught"], participle: ["Caught"], spanish: "Coger" },
+            { infinitive: "Come", past: ["Came"], participle: ["Come"], spanish: "Venir" },
+            { infinitive: "Cost", past: ["Cost"], participle: ["Cost"], spanish: "Costar" },
+            { infinitive: "Cut", past: ["Cut"], participle: ["Cut"], spanish: "Cortar" },
+            { infinitive: "Choose", past: ["Chose"], participle: ["Chosen"], spanish: "Elegir" },
+            { infinitive: "Cling", past: ["Clung"], participle: ["Clung"], spanish: "Agarrarse" },
+            { infinitive: "Creep", past: ["Crept"], participle: ["Crept"], spanish: "Arrastrarse" },
+            { infinitive: "Deal", past: ["Dealt"], participle: ["Dealt"], spanish: "Tratar" },
+            { infinitive: "Dig", past: ["Dug"], participle: ["Dug"], spanish: "Cavar" },
+            { infinitive: "Do", past: ["Did"], participle: ["Done"], spanish: "Hacer" },
+            { infinitive: "Draw", past: ["Drew"], participle: ["Drawn"], spanish: "Dibujar" },
+            { infinitive: "Dream", past: ["Dreamt", "Dreamed", "Dreamt / Dreamed", "Dreamt/Dreamed"], participle: ["Dreamt", "Dreamed", "Dreamt / Dreamed", "Dreamt/Dreamed"], spanish: "Soñar" },
+            { infinitive: "Drink", past: ["Drank"], participle: ["Drunk"], spanish: "Beber" },
+            { infinitive: "Drive", past: ["Drove"], participle: ["Driven"], spanish: "Conducir" },
+            { infinitive: "Eat", past: ["Ate"], participle: ["Eaten"], spanish: "Comer" },
+            { infinitive: "Fall", past: ["Fell"], participle: ["Fallen"], spanish: "Caer" },
+            { infinitive: "Feed", past: ["Fed"], participle: ["Fed"], spanish: "Alimentar" },
+            { infinitive: "Feel", past: ["Felt"], participle: ["Felt"], spanish: "Sentir" },
+            { infinitive: "Fight", past: ["Fought"], participle: ["Fought"], spanish: "Luchar" },
+            { infinitive: "Find", past: ["Found"], participle: ["Found"], spanish: "Encontrar" },
+            { infinitive: "Flee", past: ["Fled"], participle: ["Fled"], spanish: "Huir" },
+            { infinitive: "Fly", past: ["Flew"], participle: ["Flown"], spanish: "Volar" },
+            { infinitive: "Forbid", past: ["Forbade"], participle: ["Forbidden"], spanish: "Prohibir" },
+            { infinitive: "Forget", past: ["Forgot"], participle: ["Forgotten"], spanish: "Olvidar" },
+            { infinitive: "Forgive", past: ["Forgave"], participle: ["Forgiven"], spanish: "Perdonar" },
+            { infinitive: "Freeze", past: ["Froze"], participle: ["Frozen"], spanish: "Helar" },
+            { infinitive: "Get", past: ["Got"], participle: ["Got", "Gotten", "Got / Gotten", "Got/Gotten"], spanish: "Obtener" },
+            { infinitive: "Give", past: ["Gave"], participle: ["Given"], spanish: "Dar" },
+            { infinitive: "Go", past: ["Went"], participle: ["Gone"], spanish: "Ir" },
+            { infinitive: "Grow", past: ["Grew"], participle: ["Grown"], spanish: "Crecer" },
+            { infinitive: "Grind", past: ["Ground"], participle: ["Ground"], spanish: "Moler" },
+            { infinitive: "Hang", past: ["Hung"], participle: ["Hung"], spanish: "Colgar" },
+            { infinitive: "Have", past: ["Had"], participle: ["Had"], spanish: "Tener" },
+            { infinitive: "Hear", past: ["Heard"], participle: ["Heard"], spanish: "Oír" },
+            { infinitive: "Hide", past: ["Hid"], participle: ["Hidden"], spanish: "Ocultar" },
+            { infinitive: "Hit", past: ["Hit"], participle: ["Hit"], spanish: "Golpear" },
+            { infinitive: "Hold", past: ["Held"], participle: ["Held"], spanish: "Sostener" },
+            { infinitive: "Hurt", past: ["Hurt"], participle: ["Hurt"], spanish: "Herir" },
+            { infinitive: "Keep", past: ["Kept"], participle: ["Kept"], spanish: "Conservar" },
+            { infinitive: "Know", past: ["Knew"], participle: ["Known"], spanish: "Saber / conocer" },
+            { infinitive: "Lay", past: ["Laid"], participle: ["Laid"], spanish: "Poner" },
+            { infinitive: "Lead", past: ["Led"], participle: ["Led"], spanish: "Conducir" },
+            { infinitive: "Learn", past: ["Learnt", "Learned", "Learnt / Learned", "Learnt/Learned"], participle: ["Learnt", "Learned", "Learnt / Learned", "Learnt/Learned"], spanish: "Aprender" },
+            { infinitive: "Leave", past: ["Left"], participle: ["Left"], spanish: "Dejar" },
+            { infinitive: "Lend", past: ["Lent"], participle: ["Lent"], spanish: "Prestar" },
+            { infinitive: "Let", past: ["Let"], participle: ["Let"], spanish: "Permitir" },
+            { infinitive: "Lie", past: ["Lay"], participle: ["Lain"], spanish: "Echarse" },
+            { infinitive: "Light", past: ["Lit"], participle: ["Lit"], spanish: "Encender" },
+            { infinitive: "Lose", past: ["Lost"], participle: ["Lost"], spanish: "Perder" },
+            { infinitive: "Make", past: ["Made"], participle: ["Made"], spanish: "Hacer" },
+            { infinitive: "Mean", past: ["Meant"], participle: ["Meant"], spanish: "Significar" },
+            { infinitive: "Meet", past: ["Met"], participle: ["Met"], spanish: "Encontrar" },
+            { infinitive: "Pay", past: ["Paid"], participle: ["Paid"], spanish: "Pagar" },
+            { infinitive: "Put", past: ["Put"], participle: ["Put"], spanish: "Poner" },
+            { infinitive: "Read", past: ["Read"], participle: ["Read"], spanish: "Leer" },
+            { infinitive: "Ride", past: ["Rode"], participle: ["Ridden"], spanish: "Montar" },
+            { infinitive: "Ring", past: ["Rang"], participle: ["Rung"], spanish: "Llamar / sonar" },
+            { infinitive: "Rise", past: ["Rose"], participle: ["Risen"], spanish: "Levantarse" },
+            { infinitive: "Run", past: ["Ran"], participle: ["Run"], spanish: "Correr" },
+            { infinitive: "Say", past: ["Said"], participle: ["Said"], spanish: "Decir" },
+            { infinitive: "See", past: ["Saw"], participle: ["Seen"], spanish: "Ver" },
+            { infinitive: "Seek", past: ["Sought"], participle: ["Sought"], spanish: "Buscar" },
+            { infinitive: "Sell", past: ["Sold"], participle: ["Sold"], spanish: "Vender" },
+            { infinitive: "Send", past: ["Sent"], participle: ["Sent"], spanish: "Enviar" },
+            { infinitive: "Set", past: ["Set"], participle: ["Set"], spanish: "Colocar" },
+            { infinitive: "Shake", past: ["Shook"], participle: ["Shaken"], spanish: "Sacudir" },
+            { infinitive: "Shoot", past: ["Shot"], participle: ["Shot"], spanish: "Disparar" },
+            { infinitive: "Show", past: ["Showed"], participle: ["Shown"], spanish: "Mostrar" },
+            { infinitive: "Shut", past: ["Shut"], participle: ["Shut"], spanish: "Cerrar" },
+            { infinitive: "Sing", past: ["Sang"], participle: ["Sung"], spanish: "Cantar" },
+            { infinitive: "Sit", past: ["Sat"], participle: ["Sat"], spanish: "Sentarse" },
+            { infinitive: "Sleep", past: ["Slept"], participle: ["Slept"], spanish: "Dormir" },
+            { infinitive: "Speak", past: ["Spoke"], participle: ["Spoken"], spanish: "Hablar" },
+            { infinitive: "Spend", past: ["Spent"], participle: ["Spent"], spanish: "Gastar" },
+            { infinitive: "Stand", past: ["Stood"], participle: ["Stood"], spanish: "Estar de pie" },
+            { infinitive: "Steal", past: ["Stole"], participle: ["Stolen"], spanish: "Robar" },
+            { infinitive: "Swim", past: ["Swam"], participle: ["Swum"], spanish: "Nadar" },
+            { infinitive: "Take", past: ["Took"], participle: ["Taken"], spanish: "Coger / tomar" },
+            { infinitive: "Teach", past: ["Taught"], participle: ["Taught"], spanish: "Enseñar" },
+            { infinitive: "Tell", past: ["Told"], participle: ["Told"], spanish: "Decir / contar" },
+            { infinitive: "Think", past: ["Thought"], participle: ["Thought"], spanish: "Pensar" },
+            { infinitive: "Throw", past: ["Threw"], participle: ["Thrown"], spanish: "Lanzar" },
+            { infinitive: "Understand", past: ["Understood"], participle: ["Understood"], spanish: "Entender" },
+            { infinitive: "Wake", past: ["Woke"], participle: ["Woken"], spanish: "Despertarse" },
+            { infinitive: "Wear", past: ["Wore"], participle: ["Worn"], spanish: "Llevar puesto" },
+            { infinitive: "Win", past: ["Won"], participle: ["Won"], spanish: "Ganar" },
+            { infinitive: "Write", past: ["Wrote"], participle: ["Written"], spanish: "Escribir" }
+        ];
+
+        let isAnswersRevealed = false;
+
+        function renderTable() {
+            const tbody = document.getElementById('verbsTableBody');
+            tbody.innerHTML = '';
+
+            const maxScore = verbsData.length * 2;
+            document.getElementById('maxScoreDisplay').textContent = maxScore;
+
+            verbsData.forEach((verb, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition verb-row';
+                tr.dataset.index = index;
+
+                const primaryPast = verb.past[0];
+                const primaryParticiple = verb.participle[0];
+
+                tr.innerHTML = `
+                    <td class="py-3 px-4 sm:px-6 text-slate-400 font-medium text-center text-xs">${index + 1}</td>
+                    <td class="py-3 px-4 sm:px-6 font-semibold text-slate-800">${verb.infinitive}</td>
+                    <td class="py-3 px-4 sm:px-6">
+                        <div class="relative flex flex-col">
+                            <input type="text" 
+                                   id="past-${index}" 
+                                   data-type="past"
+                                   data-index="${index}"
+                                   placeholder="Pasado..."
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   class="verb-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            <span id="hint-past-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1">
+                                Correcto: <span class="text-indigo-600 font-semibold">${primaryPast}</span>
+                            </span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 sm:px-6">
+                        <div class="relative flex flex-col">
+                            <input type="text" 
+                                   id="participle-${index}" 
+                                   data-type="participle"
+                                   data-index="${index}"
+                                   placeholder="Participio..."
+                                   autocomplete="off"
+                                   spellcheck="false"
+                                   class="verb-input w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                            <span id="hint-participle-${index}" class="hint-text hidden text-[11px] font-medium text-slate-500 mt-1 pl-1">
+                                Correcto: <span class="text-indigo-600 font-semibold">${primaryParticiple}</span>
+                            </span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 sm:px-6 text-slate-600 font-normal">${verb.spanish}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Attach input event listener for dynamic updates
+            document.querySelectorAll('.verb-input').forEach(input => {
+                input.addEventListener('input', () => {
+                    // Reset styling on typing
+                    input.classList.remove('correct-input', 'incorrect-input');
+                    const hintId = `hint-${input.id}`;
+                    const hintEl = document.getElementById(hintId);
+                    if (hintEl) hintEl.classList.add('hidden');
+                });
+            });
+        }
+
+        // Normalization helper to evaluate answers flexibly
+        function normalizeString(str) {
+            return str
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, ' ')
+                .replace(/\s*\/\s*/g, '/'); // normalize spaces around slash
+        }
+
+        function evaluateAnswers() {
+            let currentScore = 0;
+            const maxScore = verbsData.length * 2;
+
+            verbsData.forEach((verb, index) => {
+                const pastInput = document.getElementById(`past-${index}`);
+                const participleInput = document.getElementById(`participle-${index}`);
+
+                const pastHint = document.getElementById(`hint-past-${index}`);
+                const participleHint = document.getElementById(`hint-participle-${index}`);
+
+                // Evaluate Past
+                const userPast = normalizeString(pastInput.value);
+                const validPast = verb.past.map(normalizeString);
+
+                if (userPast !== "" && validPast.includes(userPast)) {
+                    currentScore++;
+                    pastInput.classList.remove('incorrect-input');
+                    pastInput.classList.add('correct-input');
+                    pastHint.classList.add('hidden');
+                } else if (userPast !== "") {
+                    pastInput.classList.remove('correct-input');
+                    pastInput.classList.add('incorrect-input');
+                    pastHint.classList.remove('hidden');
+                } else {
+                    pastInput.classList.remove('correct-input', 'incorrect-input');
+                    pastHint.classList.add('hidden');
+                }
+
+                // Evaluate Participle
+                const userParticiple = normalizeString(participleInput.value);
+                const validParticiple = verb.participle.map(normalizeString);
+
+                if (userParticiple !== "" && validParticiple.includes(userParticiple)) {
+                    currentScore++;
+                    participleInput.classList.remove('incorrect-input');
+                    participleInput.classList.add('correct-input');
+                    participleHint.classList.add('hidden');
+                } else if (userParticiple !== "") {
+                    participleInput.classList.remove('correct-input');
+                    participleInput.classList.add('incorrect-input');
+                    participleHint.classList.remove('hidden');
+                } else {
+                    participleInput.classList.remove('correct-input', 'incorrect-input');
+                    participleHint.classList.add('hidden');
+                }
+            });
+
+            // Update UI Score & Progress
+            animateCounter('scoreDisplay', currentScore);
+            const percentage = Math.round((currentScore / maxScore) * 100);
+            document.getElementById('percentageDisplay').textContent = `${percentage}%`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+
+            // Filter if currently filtering
+            filterVerbs();
+        }
+
+        // Animated counter helper
+        function animateCounter(elementId, targetValue) {
+            const el = document.getElementById(elementId);
+            const startValue = parseInt(el.textContent) || 0;
+            const duration = 500;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(startValue + (targetValue - startValue) * progress);
+                el.textContent = value;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function toggleRevealAnswers() {
+            isAnswersRevealed = !isAnswersRevealed;
+
+            const btnText = document.getElementById('revealBtnText');
+            const btnIcon = document.getElementById('revealIcon');
+
+            verbsData.forEach((verb, index) => {
+                const pastInput = document.getElementById(`past-${index}`);
+                const participleInput = document.getElementById(`participle-${index}`);
+
+                if (isAnswersRevealed) {
+                    pastInput.value = verb.past[0];
+                    participleInput.value = verb.participle[0];
+                } else {
+                    pastInput.value = '';
+                    participleInput.value = '';
+                }
+            });
+
+            if (isAnswersRevealed) {
+                btnText.textContent = "Ocultar Respuestas";
+                btnIcon.className = "fa-solid fa-eye-slash";
+                evaluateAnswers();
+            } else {
+                btnText.textContent = "Ver Respuestas";
+                btnIcon.className = "fa-solid fa-eye";
+                resetForm();
+            }
+        }
+
+        function resetForm() {
+            verbsData.forEach((_, index) => {
+                const pastInput = document.getElementById(`past-${index}`);
+                const participleInput = document.getElementById(`participle-${index}`);
+                const pastHint = document.getElementById(`hint-past-${index}`);
+                const participleHint = document.getElementById(`hint-participle-${index}`);
+
+                pastInput.value = '';
+                participleInput.value = '';
+                pastInput.classList.remove('correct-input', 'incorrect-input');
+                participleInput.classList.remove('correct-input', 'incorrect-input');
+                pastHint.classList.add('hidden');
+                participleHint.classList.add('hidden');
+            });
+
+            document.getElementById('scoreDisplay').textContent = '0';
+            document.getElementById('percentageDisplay').textContent = '0%';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterSelect').value = 'all';
+
+            isAnswersRevealed = false;
+            document.getElementById('revealBtnText').textContent = "Ver Respuestas";
+            document.getElementById('revealIcon').className = "fa-solid fa-eye";
+
+            filterVerbs();
+        }
+
+        function filterVerbs() {
+            const query = normalizeString(document.getElementById('searchInput').value);
+            const filterValue = document.getElementById('filterSelect').value;
+            const rows = document.querySelectorAll('.verb-row');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const index = parseInt(row.dataset.index);
+                const verb = verbsData[index];
+
+                const pastInput = document.getElementById(`past-${index}`);
+                const participleInput = document.getElementById(`participle-${index}`);
+
+                // Text search match
+                const matchesSearch =
+                    verb.infinitive.toLowerCase().includes(query) ||
+                    verb.spanish.toLowerCase().includes(query) ||
+                    verb.past.some(p => p.toLowerCase().includes(query)) ||
+                    verb.participle.some(p => p.toLowerCase().includes(query));
+
+                // State filter match
+                let matchesFilter = true;
+                const pastCorrect = pastInput.classList.contains('correct-input');
+                const participleCorrect = participleInput.classList.contains('correct-input');
+                const pastIncorrect = pastInput.classList.contains('incorrect-input');
+                const participleIncorrect = participleInput.classList.contains('incorrect-input');
+
+                if (filterValue === 'pending') {
+                    matchesFilter = (pastInput.value.trim() === '' || participleInput.value.trim() === '');
+                } else if (filterValue === 'correct') {
+                    matchesFilter = pastCorrect && participleCorrect;
+                } else if (filterValue === 'incorrect') {
+                    matchesFilter = pastIncorrect || participleIncorrect;
+                }
+
+                if (matchesSearch && matchesFilter) {
+                    row.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+
+            const emptyState = document.getElementById('emptyState');
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        window.onload = function () {
+            renderTable();
+
+            document.getElementById('searchInput').addEventListener('input', filterVerbs);
+            document.getElementById('filterSelect').addEventListener('change', filterVerbs);
+        };
+    </script>
+</body>
+
+</html>
